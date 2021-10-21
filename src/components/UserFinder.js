@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, Component } from 'react';
 
 import Users from './Users';
 import classes from './UserFinder.module.css';
@@ -9,28 +9,39 @@ const DUMMY_USERS = [
   { id: 'u3', name: 'Julie' },
 ];
 
-const UserFinder = () => {
-  const [filteredUsers, setFilteredUsers] = useState(DUMMY_USERS);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
-    setFilteredUsers(
-      DUMMY_USERS.filter((user) => user.name.includes(searchTerm))
-    );
-  }, [searchTerm]);
-
-  const searchChangeHandler = (event) => {
-    setSearchTerm(event.target.value);
+class UserFinder extends Component {
+  constructor() {
+    super();
+    this.state = {
+      filteredUsers: DUMMY_USERS,
+      searchTerm: '',
+    };
   };
 
-  return (
-    <Fragment>
-      <div className={classes.finder}>
-        <input type='search' onChange={searchChangeHandler} />
-      </div>
-      <Users users={filteredUsers} />
-    </Fragment>
-  );
+  // 'componentDidUpdate()' is the class-based equivalent to using 'useEffect()' with dependencies
+  // It will be called automatically by React whenever this component is re-evaluated, for example, when it's state changed
+  // As this state change would cause 'componentDidUpdate()' to be called again, we would end-up in an infinite loop
+  // We get around this by comparing the previous state to the current state, and only running setState() if they are different (as below)
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchTerm !== this.state.searchTerm) {
+      this.setState({ filteredUsers: DUMMY_USERS.filter((user) => user.name.includes(this.state.searchTerm)) })
+    };
+  };
+
+  searchChangeHandler(event) {
+    this.setState({ searchTerm: event.target.value });
+  };
+
+  render() {
+    return (
+      <Fragment>
+        <div className={classes.finder}>
+          <input type='search' onChange={this.searchChangeHandler.bind(this)} />
+        </div>
+        <Users users={this.state.filteredUsers} />
+      </Fragment>
+    );
+  }
 };
 
 export default UserFinder;
