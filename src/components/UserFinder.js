@@ -13,9 +13,15 @@ class UserFinder extends Component {
   constructor() {
     super();
     this.state = {
-      filteredUsers: DUMMY_USERS,
+      filteredUsers: [], // The initial state has no users (for example, if we need to fetch the users from a database)
       searchTerm: '',
     };
+  };
+
+  // 'componentDidMount()' is the class-based equivalent to 'useEffect()' without any dependencies (e.g useEffect(someFunction, [])) - It will run only once, after the component is first rendered
+  componentDidMount() {
+    // Sending imaginary http request...
+    this.setState({ filteredUsers: DUMMY_USERS });
   };
 
   // 'componentDidUpdate()' is the class-based equivalent to using 'useEffect()' with dependencies
