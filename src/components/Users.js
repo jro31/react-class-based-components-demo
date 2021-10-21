@@ -3,12 +3,6 @@ import User from './User';
 
 import classes from './Users.module.css';
 
-const DUMMY_USERS = [
-  { id: 'u1', name: 'Max' },
-  { id: 'u2', name: 'Manuel' },
-  { id: 'u3', name: 'Julie' },
-];
-
 // Prior to React 16.8 (which introduced hooks) you could only manage state in class-based components (and not in functional components)
 class Users extends Component {
   // The constructor is automatically called when this class is instantiated (whenever it gets used as a component)
@@ -36,7 +30,7 @@ class Users extends Component {
   render() {
     const usersList = (
       <ul>
-        {DUMMY_USERS.map((user) => (
+        {this.props.users.map((user) => (
           <User key={user.id} name={user.name} />
         ))}
       </ul>
