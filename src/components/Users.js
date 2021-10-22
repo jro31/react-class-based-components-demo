@@ -16,6 +16,14 @@ class Users extends Component {
     // It also HAS TO be a property named 'state', and you can only have one state object (which contains all the different 'pieces' of state)
   };
 
+  componentDidUpdate() {
+    if (this.props.users.length === 0) {
+      throw new Error('No users provided!');
+      // If we want to handle this error in this component, we can use a JS try/catch block
+      // However, if we want to handle it in a parent component, we cannot. Instead we can use an 'error boundary'
+    };
+  };
+
   toggleUsersHandler() {
     this.setState((curState) => {
       return { showUsers: !curState.showUsers };
