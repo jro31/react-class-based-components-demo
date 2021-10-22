@@ -2,14 +2,12 @@ import { Fragment, Component } from 'react';
 
 import Users from './Users';
 import classes from './UserFinder.module.css';
-
-const DUMMY_USERS = [
-  { id: 'u1', name: 'Max' },
-  { id: 'u2', name: 'Manuel' },
-  { id: 'u3', name: 'Julie' },
-];
+import UsersContext from '../store/users-context';
 
 class UserFinder extends Component {
+  // You can only connect a class-based component to one context
+  static contextType = UsersContext;
+
   constructor() {
     super();
     this.state = {
@@ -21,7 +19,7 @@ class UserFinder extends Component {
   // 'componentDidMount()' is the class-based equivalent to 'useEffect()' without any dependencies (e.g useEffect(someFunction, [])) - It will run only once, after the component is first rendered
   componentDidMount() {
     // Sending imaginary http request...
-    this.setState({ filteredUsers: DUMMY_USERS });
+    this.setState({ filteredUsers: this.context.users });
   };
 
   // 'componentDidUpdate()' is the class-based equivalent to using 'useEffect()' with dependencies
@@ -30,7 +28,7 @@ class UserFinder extends Component {
   // We get around this by comparing the previous state to the current state, and only running setState() if they are different (as below)
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchTerm !== this.state.searchTerm) {
-      this.setState({ filteredUsers: DUMMY_USERS.filter((user) => user.name.includes(this.state.searchTerm)) })
+      this.setState({ filteredUsers: this.context.users.filter((user) => user.name.includes(this.state.searchTerm)) })
     };
   };
 
